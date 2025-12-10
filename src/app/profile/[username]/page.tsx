@@ -62,17 +62,17 @@ export default async function ProfilePage({ params }: { params: Promise<{ userna
       <main className="container mx-auto px-4 py-8 max-w-4xl space-y-6">
         {/* Profile Header */}
         <div className="glass-panel p-6">
-          <div className="flex items-start gap-6">
+          <div className="flex flex-col md:flex-row items-start gap-6">
             {user.image ? (
-              <img src={user.image} alt={user.name || 'User'} className="w-32 h-32 rounded-full object-cover" />
+              <img src={user.image} alt={user.name || 'User'} className="w-28 h-28 md:w-32 md:h-32 rounded-full object-cover" />
             ) : (
-              <div className="w-32 h-32 rounded-full bg-white/10 flex items-center justify-center text-white text-5xl font-bold">
+              <div className="w-28 h-28 md:w-32 md:h-32 rounded-full bg-white/10 flex items-center justify-center text-white text-4xl md:text-5xl font-bold">
                 {user.name?.[0] || 'U'}
               </div>
             )}
             
             <div className="flex-1 space-y-2">
-              <div className="flex items-start justify-between">
+              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
                 <div>
                   <h1 className="text-3xl font-bold">{user.name}</h1>
                   {user.username && (
@@ -86,7 +86,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ userna
                 <p className="text-muted">{user.bio}</p>
               )}
 
-              <div className="flex items-center gap-4 text-sm text-muted">
+              <div className="grid grid-cols-2 sm:flex sm:flex-wrap sm:items-center gap-3 text-sm text-muted">
                 <span><strong>{user.followers.length}</strong> followers</span>
                 <span><strong>{user.following.length}</strong> following</span>
                 <span><strong>{user.posts.length}</strong> posts</span>

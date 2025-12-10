@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { Navigation } from '@/components/Navigation'
-import { Search as SearchIcon, Users, User } from 'lucide-react'
+import { Search as SearchIcon, Users } from 'lucide-react'
 import Link from 'next/link'
 
 export default function SearchPage() {
@@ -30,52 +30,55 @@ export default function SearchPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-bulletin-50 via-bulletin-100 to-bulletin-200">
+    <div className="min-h-screen text-white bg-[radial-gradient(circle_at_20%_20%,rgba(124,58,237,0.18),transparent_32%),radial-gradient(circle_at_80%_0%,rgba(34,211,238,0.2),transparent_30%),linear-gradient(145deg,#0a0f1f,#0c1126_50%,#0a0e1c)]">
       <Navigation />
       
-      <main className="container mx-auto px-4 py-8 max-w-4xl">
-        <div className="bulletin-card mb-8 relative">
-          <div className="bulletin-pin"></div>
-          <div className="bulletin-tape"></div>
-          
-          <h1 className="text-3xl font-bold text-bulletin-900 mb-4 mt-2">Search</h1>
-          
-          <form onSubmit={handleSearch} className="flex gap-2">
-            <input
-              type="text"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search for users or bulletin boards..."
-              className="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-bulletin-500"
-            />
-            <button type="submit" className="bulletin-button" disabled={isLoading}>
-              {isLoading ? 'Searching...' : <SearchIcon size={20} />}
+      <main className="container mx-auto px-4 py-8 max-w-4xl space-y-8">
+        <div className="glass-panel p-6">
+          <div className="flex items-start justify-between gap-4 mb-4">
+            <div>
+              <p className="text-muted text-xs uppercase tracking-[0.18em]">Discover</p>
+              <h1 className="text-3xl font-bold">Search</h1>
+              <p className="text-muted">Find people and boards across the network.</p>
+            </div>
+          </div>
+
+          <form onSubmit={handleSearch} className="flex flex-col sm:flex-row gap-3">
+            <div className="flex-1 relative">
+              <SearchIcon className="absolute left-3 top-3.5 h-5 w-5 text-muted" />
+              <input
+                type="text"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Search for users or boards..."
+                className="w-full pl-11 pr-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-sky-400"
+              />
+            </div>
+            <button type="submit" className="cta-button px-4 py-3 sm:w-auto w-full justify-center" disabled={isLoading}>
+              {isLoading ? 'Searching...' : 'Search'}
             </button>
           </form>
         </div>
 
         {/* Users Results */}
         {results.users.length > 0 && (
-          <div className="mb-8">
-            <h2 className="text-2xl font-bold text-bulletin-900 mb-4">Users</h2>
-            <div className="space-y-3">
+          <div className="space-y-3">
+            <h2 className="text-2xl font-bold">Users</h2>
+            <div className="grid sm:grid-cols-2 gap-3">
               {results.users.map((user: any) => (
                 <Link key={user.id} href={`/profile/${user.username || user.id}`}>
-                  <div className="bulletin-card relative hover:shadow-lg transition cursor-pointer flex items-center gap-3">
-                    <div className="bulletin-pin"></div>
-                    
+                  <div className="glass-panel p-4 flex items-center gap-3 hover:border-white/20 transition cursor-pointer">
                     {user.image ? (
                       <img src={user.image} alt={user.name} className="w-12 h-12 rounded-full object-cover" />
                     ) : (
-                      <div className="w-12 h-12 rounded-full bg-bulletin-400 flex items-center justify-center text-white font-bold">
+                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-violet-500 to-sky-400 flex items-center justify-center text-white font-bold">
                         {user.name?.[0] || 'U'}
                       </div>
                     )}
-                    
-                    <div>
-                      <h3 className="font-bold text-bulletin-900">{user.name}</h3>
-                      {user.username && <p className="text-sm text-gray-600">@{user.username}</p>}
-                      {user.bio && <p className="text-sm text-gray-600 line-clamp-1">{user.bio}</p>}
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-semibold truncate">{user.name}</h3>
+                      {user.username && <p className="text-sm text-muted truncate">@{user.username}</p>}
+                      {user.bio && <p className="text-sm text-muted line-clamp-1">{user.bio}</p>}
                     </div>
                   </div>
                 </Link>
@@ -86,28 +89,25 @@ export default function SearchPage() {
 
         {/* Boards Results */}
         {results.boards.length > 0 && (
-          <div className="mb-8">
-            <h2 className="text-2xl font-bold text-bulletin-900 mb-4">Bulletin Boards</h2>
-            <div className="space-y-3">
+          <div className="space-y-3">
+            <h2 className="text-2xl font-bold">Boards</h2>
+            <div className="grid sm:grid-cols-2 gap-3">
               {results.boards.map((board: any) => (
                 <Link key={board.id} href={`/boards/${board.id}`}>
-                  <div className="bulletin-card relative hover:shadow-lg transition cursor-pointer flex items-center gap-3">
-                    <div className="bulletin-pin"></div>
-                    
+                  <div className="glass-panel p-4 flex items-center gap-3 hover:border-white/20 transition cursor-pointer">
                     {board.image ? (
                       <img src={board.image} alt={board.name} className="w-12 h-12 rounded-lg object-cover" />
                     ) : (
-                      <div className="w-12 h-12 rounded-lg bg-bulletin-400 flex items-center justify-center">
+                      <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-violet-500 to-sky-400 flex items-center justify-center">
                         <Users className="text-white" size={24} />
                       </div>
                     )}
-                    
-                    <div>
-                      <h3 className="font-bold text-bulletin-900">{board.name}</h3>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-semibold truncate">{board.name}</h3>
                       {board.description && (
-                        <p className="text-sm text-gray-600 line-clamp-1">{board.description}</p>
+                        <p className="text-sm text-muted line-clamp-1">{board.description}</p>
                       )}
-                      <p className="text-sm text-gray-500">{board.members?.length || 0} members</p>
+                      <p className="text-sm text-muted">{board.members?.length || 0} members</p>
                     </div>
                   </div>
                 </Link>
@@ -118,10 +118,9 @@ export default function SearchPage() {
 
         {/* No Results */}
         {query && !isLoading && results.users.length === 0 && results.boards.length === 0 && (
-          <div className="bulletin-card text-center relative py-12">
-            <div className="bulletin-pin"></div>
-            <h3 className="text-xl font-bold text-bulletin-900 mb-2">No results found</h3>
-            <p className="text-gray-600">Try searching with different keywords</p>
+          <div className="glass-panel text-center py-10">
+            <h3 className="text-xl font-bold mb-2">No results found</h3>
+            <p className="text-muted">Try different keywords.</p>
           </div>
         )}
       </main>
