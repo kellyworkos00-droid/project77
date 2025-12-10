@@ -16,8 +16,8 @@ export function Navigation() {
 
   return (
     <>
-      {/* Desktop top nav */}
-      <nav className="hidden md:block sticky top-0 z-50 backdrop-blur-xl bg-black/40 border-b border-white/10">
+      {/* Top nav with logo - always visible */}
+      <nav className="sticky top-0 z-50 backdrop-blur-xl bg-black/40 border-b border-white/10">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-16">
             <Link href="/feed" className="flex items-center gap-3 text-xl font-semibold text-white hover:text-sky-200 transition">
@@ -33,7 +33,7 @@ export function Navigation() {
               <span className="hidden sm:inline tracking-tight">PinBoard</span>
             </Link>
 
-            <div className="flex items-center gap-4">
+            <div className="hidden md:flex items-center gap-4">
               <Link href="/feed" className={`flex items-center gap-2 text-muted hover:text-white transition ${isActive('/feed') ? 'text-white' : ''}`}>
                 <Home size={18} />
                 <span className="hidden md:inline text-sm font-medium">Home</span>
@@ -98,6 +98,10 @@ export function Navigation() {
             <Link href="/search" className={`flex flex-col items-center gap-1 text-xs font-semibold transition ${isActive('/search') ? 'text-white' : 'text-muted hover:text-white'}`}>
               <Search size={22} />
               <span>Search</span>
+            </Link>
+            <Link href="/streak" className={`flex flex-col items-center gap-1 text-xs font-semibold transition ${isActive('/streak') ? 'text-white' : 'text-muted hover:text-white'}`}>
+              <Flame size={22} className="text-orange-400" />
+              <span>Streak</span>
             </Link>
             <Link
               href={`/profile/${session.user?.username || session.user?.id}`}
