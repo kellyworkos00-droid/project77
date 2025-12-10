@@ -1,6 +1,10 @@
 # PinBoard 📌
 
+![PinBoard Logo](./public/logo.svg)
+
 A social media platform where real connections stick. Share, connect, and engage through digital bulletin boards that bring people together for authentic interactions.
+
+**Repository**: [https://github.com/kellyworkos00-droid/project77](https://github.com/kellyworkos00-droid/project77)
 
 ## Features ✨
 
