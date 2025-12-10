@@ -5,7 +5,7 @@ import { Navigation } from '@/components/Navigation'
 import { prisma } from '@/lib/prisma'
 import { PostCard } from '@/components/PostCard'
 import { FollowButton } from '@/components/FollowButton'
-import { MapPin, Calendar, Link as LinkIcon } from 'lucide-react'
+import { MapPin, Calendar, Link as LinkIcon, Settings } from 'lucide-react'
 import { formatDistanceToNow } from 'date-fns'
 
 export default async function ProfilePage({ params }: { params: Promise<{ username: string }> }) {
@@ -79,7 +79,18 @@ export default async function ProfilePage({ params }: { params: Promise<{ userna
                     <p className="text-muted">@{user.username}</p>
                   )}
                 </div>
-                {!isOwnProfile && <FollowButton userId={user.id} initialFollowing={isFollowing} />}
+                <div className="flex items-center gap-2">
+                  {isOwnProfile && (
+                    <a
+                      href="/settings"
+                      className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 hover:border-sky-300 hover:text-sky-200 transition text-sm font-medium"
+                    >
+                      <Settings size={16} />
+                      <span>Settings</span>
+                    </a>
+                  )}
+                  {!isOwnProfile && <FollowButton userId={user.id} initialFollowing={isFollowing} />}
+                </div>
               </div>
 
               {user.bio && (
