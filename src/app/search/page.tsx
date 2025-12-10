@@ -263,7 +263,7 @@ export default function SearchPage() {
         {results.posts.length > 0 && (
           <div className="space-y-4">
             <h2 className="text-2xl font-bold flex items-center gap-2">Posts for {query}</h2>
-            <div className="space-y-4">
+            <div className="space-y-4 w-full">
               {results.posts.map((post: any) => (
                 <PostCard key={post.id} post={post} currentUserId={session?.user.id || ''} />
               ))}

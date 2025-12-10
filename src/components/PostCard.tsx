@@ -128,7 +128,7 @@ export function PostCard({ post, currentUserId }: PostCardProps) {
   }
 
   return (
-    <div className="glass-panel p-5 space-y-4">
+    <div className="glass-panel p-5 space-y-4 w-full">
       {/* Header */}
       <div className="flex items-start justify-between">
         <div className="flex items-center gap-3">
