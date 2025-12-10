@@ -41,14 +41,14 @@ export function CreatePost({ userId, bulletinBoardId }: CreatePostProps) {
   }
 
   return (
-    <div className="glass-panel p-5">
+    <div className="glass-panel p-4">
       <form onSubmit={handleSubmit} className="space-y-3">
         <textarea
           value={content}
           onChange={(e) => setContent(e.target.value)}
           placeholder="Start a conversation... add #hashtags and @mentions"
-          className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-sky-400 resize-none"
-          rows={3}
+          className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-xl text-white placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-sky-400 resize-none text-sm"
+          rows={2}
         />
 
         <div className="flex items-center justify-end">
