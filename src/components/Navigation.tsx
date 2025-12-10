@@ -1,9 +1,9 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { useSession, signOut } from 'next-auth/react'
 import { Home, Users, MessageCircle, User, Search, LogOut, Flame } from 'lucide-react'
-import { Logo } from './Logo'
 
 export function Navigation() {
   const { data: session } = useSession()
@@ -15,7 +15,15 @@ export function Navigation() {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           <Link href="/feed" className="flex items-center gap-3 text-xl font-semibold text-white hover:text-sky-200 transition">
-            <Logo size={34} />
+            <div className="relative h-9 w-9 overflow-hidden rounded-lg ring-1 ring-white/10">
+              <Image
+                src="/logo.png"
+                alt="PinBoard"
+                fill
+                sizes="36px"
+                className="object-cover"
+              />
+            </div>
             <span className="hidden sm:inline tracking-tight">PinBoard</span>
           </Link>
 
