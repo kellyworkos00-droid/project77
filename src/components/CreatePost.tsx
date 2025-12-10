@@ -12,6 +12,8 @@ export function CreatePost({ userId, bulletinBoardId }: CreatePostProps) {
   const router = useRouter()
   const [content, setContent] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [imageFile, setImageFile] = useState<File | null>(null)
+  const [imagePreview, setImagePreview] = useState<string>('')
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -20,17 +22,33 @@ export function CreatePost({ userId, bulletinBoardId }: CreatePostProps) {
     setIsSubmitting(true)
 
     try {
+      let mediaUrl = ''
+      let mediaType = ''
+
+      if (imageFile) {
+        const reader = new FileReader()
+        mediaUrl = await new Promise<string>((resolve) => {
+          reader.onload = () => resolve(reader.result as string)
+          reader.readAsDataURL(imageFile)
+        })
+        mediaType = imageFile.type.startsWith('video/') ? 'video' : 'image'
+      }
+
       const res = await fetch('/api/posts', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           content,
           bulletinBoardId,
+          mediaUrl: mediaUrl || undefined,
+          mediaType: mediaType || undefined,
         }),
       })
 
       if (res.ok) {
         setContent('')
+        setImageFile(null)
+        setImagePreview('')
         router.refresh()
       }
     } catch (error) {
@@ -38,6 +56,20 @@ export function CreatePost({ userId, bulletinBoardId }: CreatePostProps) {
     } finally {
       setIsSubmitting(false)
     }
+  }
+
+  const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      setImageFile(file)
+      const preview = URL.createObjectURL(file)
+      setImagePreview(preview)
+    }
+  }
+
+  const removeImage = () => {
+    setImageFile(null)
+    setImagePreview('')
   }
 
   return (
@@ -51,7 +83,29 @@ export function CreatePost({ userId, bulletinBoardId }: CreatePostProps) {
           rows={2}
         />
 
-        <div className="flex items-center justify-end">
+        {imagePreview && (
+          <div className="relative w-full h-48 rounded-xl overflow-hidden border border-white/10">
+            <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
+            <button
+              type="button"
+              onClick={removeImage}
+              className="absolute top-2 right-2 p-2 rounded-full bg-black/60 text-white hover:bg-black/80 transition"
+            >
+              ✕
+            </button>
+          </div>
+        )}
+
+        <div className="flex items-center justify-between">
+          <label className="cursor-pointer px-3 py-2 rounded-full bg-white/5 border border-white/10 hover:border-sky-300 hover:text-sky-200 transition text-sm">
+            📷 Photo/Video
+            <input
+              type="file"
+              accept="image/*,video/*"
+              onChange={handleImageSelect}
+              className="hidden"
+            />
+          </label>
           <button
             type="submit"
             disabled={!content.trim() || isSubmitting}
