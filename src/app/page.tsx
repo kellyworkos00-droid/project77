@@ -12,62 +12,106 @@ export default async function Home() {
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-bulletin-50 via-bulletin-100 to-bulletin-200">
-      <div className="container mx-auto px-4 py-16">
-        <div className="text-center max-w-4xl mx-auto">
-          {/* Header with bulletin board aesthetic */}
-          <div className="relative inline-block mb-8">
-            <div className="bulletin-tape"></div>
-            <div className="flex flex-col items-center gap-4">
-              <Logo size={80} />
-              <h1 className="text-6xl font-bold text-bulletin-900 mb-4 relative">
-                PinBoard
-                <div className="bulletin-pin"></div>
-              </h1>
+    <main className="min-h-screen text-white">
+      <div className="container mx-auto px-4 py-16 lg:py-20">
+        <div className="grid lg:grid-cols-2 gap-12 items-center">
+          <div className="space-y-6">
+            <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-white/10 border border-white/10 text-sm font-semibold text-sky-200">
+              <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
+              Live social boards, zero noise
             </div>
-          </div>
-          
-          <p className="text-2xl text-bulletin-800 mb-8">
-            Real connections. Real people. Real conversations.
-          </p>
-          
-          <div className="bulletin-card max-w-2xl mx-auto mb-12 relative">
-            <div className="bulletin-pin right-8"></div>
-            <div className="bulletin-pin left-8"></div>
-            <p className="text-lg text-gray-700 mb-6">
-              Join bulletin boards, share your thoughts, connect with others, 
-              build streaks, and create lasting memories. No algorithms, 
-              just authentic human connection.
+
+            <div className="flex items-center gap-4">
+              <Logo size={64} />
+              <div>
+                <p className="text-muted text-sm uppercase tracking-[0.18em]">PinBoard</p>
+                <h1 className="text-4xl md:text-5xl font-bold leading-tight">Social that feels alive.</h1>
+              </div>
+            </div>
+
+            <p className="text-lg text-muted max-w-xl">
+              Build boards, drop posts, share moments, and keep streaks with the people who matter. No casino feeds—just clean, real-time connection.
             </p>
-            
-            <div className="flex gap-4 justify-center flex-wrap">
-              <Link href="/auth/signin" className="bulletin-button">
-                Sign In
+
+            <div className="flex flex-wrap gap-3">
+              <Link href="/auth/signup" className="cta-button">
+                Create your board
               </Link>
-              <Link href="/auth/signup" className="bulletin-button bg-bulletin-500 hover:bg-bulletin-600">
-                Create Account
+              <Link href="/auth/signin" className="pill-button">
+                I already have an account
               </Link>
+            </div>
+
+            <div className="flex flex-wrap gap-3 text-sm text-muted">
+              <span className="tag">Realtime threads</span>
+              <span className="tag">Streaks & memories</span>
+              <span className="tag">DMs & follow graph</span>
+              <span className="tag">Posts, videos, shares</span>
             </div>
           </div>
 
-          {/* Features */}
-          <div className="grid md:grid-cols-3 gap-6 mt-12">
-            <div className="bulletin-card relative">
-              <div className="bulletin-pin"></div>
-              <h3 className="text-xl font-bold text-bulletin-800 mb-2">Bulletin Boards</h3>
-              <p className="text-gray-600">Join communities around your interests and connect with like-minded people</p>
+          <div className="grid gap-4">
+            <div className="glass-panel p-6">
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <p className="text-muted text-sm">Live feed</p>
+                  <h3 className="text-xl font-semibold">Boards lighting up</h3>
+                </div>
+                <div className="flex gap-2">
+                  <span className="pill-button">Trending</span>
+                  <span className="pill-button">Following</span>
+                </div>
+              </div>
+              <div className="space-y-3">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-sky-500 to-violet-500" />
+                  <div>
+                    <p className="font-semibold">Board • Design Crew</p>
+                    <p className="text-muted text-sm">“Ship the idea while it’s hot.”</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-500 to-cyan-500" />
+                  <div>
+                    <p className="font-semibold">Board • Builders</p>
+                    <p className="text-muted text-sm">Live demo drop + code link</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-amber-500 to-rose-500" />
+                  <div>
+                    <p className="font-semibold">Board • IRL</p>
+                    <p className="text-muted text-sm">Moments, clips, quick reactions</p>
+                  </div>
+                </div>
+              </div>
+              <div className="divider my-4"></div>
+              <div className="flex items-center gap-2 text-muted text-sm">
+                <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
+                2,184 active right now
+              </div>
             </div>
-            
-            <div className="bulletin-card relative">
-              <div className="bulletin-pin"></div>
-              <h3 className="text-xl font-bold text-bulletin-800 mb-2">Share & Connect</h3>
-              <p className="text-gray-600">Post videos, images, and thoughts. Comment, like, and repost content you love</p>
-            </div>
-            
-            <div className="bulletin-card relative">
-              <div className="bulletin-pin"></div>
-              <h3 className="text-xl font-bold text-bulletin-800 mb-2">Build Streaks</h3>
-              <p className="text-gray-600">Stay engaged with daily streaks and relive memories from the past</p>
+
+            <div className="glass-panel p-6">
+              <h3 className="text-lg font-semibold mb-3">Why it feels modern</h3>
+              <div className="card-grid">
+                <div className="p-3 bg-white/5 rounded-xl border border-white/10">
+                  <p className="font-semibold">Fast lanes</p>
+                  <p className="text-muted text-sm">Realtime posts, streaks, and DMs without bloat.</p>
+                </div>
+                <div className="p-3 bg-white/5 rounded-xl border border-white/10">
+                  <p className="font-semibold">Signal first</p>
+                  <p className="text-muted text-sm">No slot-machine feeds—just people you choose.</p>
+                </div>
+                <div className="p-3 bg-white/5 rounded-xl border border-white/10">
+                  <p className="font-semibold">Creator-ready</p>
+                  <p className="text-muted text-sm">Posts, clips, shares, and reposts that travel.</p>
+                </div>
+                <div className="p-3 bg-white/5 rounded-xl border border-white/10">
+                  <p className="font-semibold">Community-first</p>
+                  <p className="text-muted text-sm">Boards to gather, streaks to keep the energy.</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>

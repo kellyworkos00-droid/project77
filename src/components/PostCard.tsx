@@ -87,30 +87,28 @@ export function PostCard({ post, currentUserId }: PostCardProps) {
   }
 
   return (
-    <div className="bulletin-card relative">
-      <div className="bulletin-pin"></div>
-
+    <div className="glass-panel p-5 space-y-4">
       {/* Header */}
-      <div className="flex items-start justify-between mb-3">
+      <div className="flex items-start justify-between">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-bulletin-400 flex items-center justify-center text-white font-bold">
+          <div className="w-11 h-11 rounded-full bg-gradient-to-br from-violet-500 to-sky-400 flex items-center justify-center text-white font-semibold">
             {post.user.name?.[0] || 'U'}
           </div>
-          <div>
+          <div className="space-y-1">
             <Link
               href={`/profile/${post.user.username || post.user.id}`}
-              className="font-bold text-bulletin-900 hover:underline"
+              className="font-semibold text-white hover:text-sky-200 transition"
             >
               {post.user.name || 'Anonymous'}
             </Link>
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-muted">
               {formatDistanceToNow(new Date(post.createdAt), { addSuffix: true })}
               {post.bulletinBoard && (
                 <span>
-                  {' • in '}
+                  {' • '}
                   <Link
                     href={`/boards/${post.bulletinBoard.id}`}
-                    className="text-bulletin-600 hover:underline"
+                    className="text-sky-300 hover:text-sky-100 transition"
                   >
                     {post.bulletinBoard.name}
                   </Link>
@@ -119,17 +117,17 @@ export function PostCard({ post, currentUserId }: PostCardProps) {
             </p>
           </div>
         </div>
-        <button className="text-gray-500 hover:text-gray-700">
-          <MoreVertical size={20} />
+        <button className="p-2 rounded-full hover:bg-white/5 text-muted hover:text-white transition">
+          <MoreVertical size={18} />
         </button>
       </div>
 
       {/* Content */}
-      <p className="text-gray-800 mb-4 whitespace-pre-wrap">{post.content}</p>
+      <p className="text-lg leading-relaxed text-white/90 whitespace-pre-wrap">{post.content}</p>
 
       {/* Media */}
       {post.mediaUrl && (
-        <div className="mb-4 rounded-lg overflow-hidden">
+        <div className="overflow-hidden rounded-2xl border border-white/10">
           {post.mediaType === 'image' ? (
             <img src={post.mediaUrl} alt="Post media" className="w-full" />
           ) : post.mediaType === 'video' ? (
@@ -139,67 +137,67 @@ export function PostCard({ post, currentUserId }: PostCardProps) {
       )}
 
       {/* Actions */}
-      <div className="flex items-center gap-6 pt-3 border-t border-gray-200">
+      <div className="flex items-center gap-4 pt-3 border-t border-white/5">
         <button
           onClick={handleLike}
-          className={`flex items-center gap-2 transition ${
-            isLiked ? 'text-red-500' : 'text-gray-600 hover:text-red-500'
+          className={`flex items-center gap-2 px-3 py-2 rounded-full transition ${
+            isLiked ? 'bg-rose-500/10 text-rose-300' : 'text-muted hover:bg-white/5 hover:text-white'
           }`}
         >
-          <Heart size={20} fill={isLiked ? 'currentColor' : 'none'} />
-          <span>{likesCount}</span>
+          <Heart size={18} fill={isLiked ? 'currentColor' : 'none'} />
+          <span className="text-sm font-semibold">{likesCount}</span>
         </button>
 
         <button
           onClick={() => setShowComments(!showComments)}
-          className="flex items-center gap-2 text-gray-600 hover:text-bulletin-600 transition"
+          className="flex items-center gap-2 px-3 py-2 rounded-full text-muted hover:bg-white/5 hover:text-white transition"
         >
-          <MessageCircle size={20} />
-          <span>{post.comments.length}</span>
+          <MessageCircle size={18} />
+          <span className="text-sm font-semibold">{post.comments.length}</span>
         </button>
 
         <button
           onClick={handleRepost}
-          className="flex items-center gap-2 text-gray-600 hover:text-green-600 transition"
+          className="flex items-center gap-2 px-3 py-2 rounded-full text-muted hover:bg-white/5 hover:text-white transition"
         >
-          <Repeat2 size={20} />
-          <span>{post.reposts.length}</span>
+          <Repeat2 size={18} />
+          <span className="text-sm font-semibold">{post.reposts.length}</span>
         </button>
 
         <button
           onClick={handleShare}
-          className="flex items-center gap-2 text-gray-600 hover:text-blue-600 transition"
+          className="flex items-center gap-2 px-3 py-2 rounded-full text-muted hover:bg-white/5 hover:text-white transition"
         >
-          <Share2 size={20} />
-          <span>{post.shares.length}</span>
+          <Share2 size={18} />
+          <span className="text-sm font-semibold">{post.shares.length}</span>
         </button>
       </div>
 
       {/* Comments */}
       {showComments && (
-        <div className="mt-4 pt-4 border-t border-gray-200">
-          <form onSubmit={handleComment} className="mb-4">
+        <div className="space-y-3 pt-4 border-t border-white/5">
+          <form onSubmit={handleComment}>
             <input
               type="text"
               value={newComment}
               onChange={(e) => setNewComment(e.target.value)}
-              placeholder="Write a comment..."
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-bulletin-500"
+              placeholder="Add a comment"
+              className="w-full px-3 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-sky-400"
             />
           </form>
 
           <div className="space-y-3">
             {post.comments.map((comment: any) => (
-              <div key={comment.id} className="flex gap-2">
-                <div className="w-8 h-8 rounded-full bg-bulletin-300 flex items-center justify-center text-white text-sm font-bold">
+              <div key={comment.id} className="flex gap-3">
+                <div className="w-9 h-9 rounded-full bg-gradient-to-br from-sky-500 to-indigo-500 flex items-center justify-center text-white text-sm font-semibold">
                   {comment.user.name?.[0] || 'U'}
                 </div>
-                <div className="flex-1 bg-gray-50 rounded-lg px-3 py-2">
-                  <p className="font-medium text-sm text-bulletin-900">
+                <div className="flex-1 bg-white/3 border border-white/5 rounded-xl px-3 py-2">
+                  <p className="font-semibold text-white text-sm">
                     {comment.user.name || 'Anonymous'}
                   </p>
-                  <p className="text-gray-700 text-sm">{comment.content}</p>
-                  <p className="text-xs text-gray-500 mt-1">
+                  <p className="text-white/80 text-sm">{comment.content}</p>
+                  <p className="text-xs text-muted mt-1">
                     {formatDistanceToNow(new Date(comment.createdAt), { addSuffix: true })}
                   </p>
                 </div>

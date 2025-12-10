@@ -42,43 +42,40 @@ export function CreatePost({ userId, bulletinBoardId }: CreatePostProps) {
   }
 
   return (
-    <div className="bulletin-card relative">
-      <div className="bulletin-pin"></div>
-      <div className="bulletin-tape"></div>
-      
-      <form onSubmit={handleSubmit} className="mt-2">
+    <div className="glass-panel p-5">
+      <form onSubmit={handleSubmit} className="space-y-3">
         <textarea
           value={content}
           onChange={(e) => setContent(e.target.value)}
-          placeholder="What's on your mind?"
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-bulletin-500 resize-none"
+          placeholder="Start a conversation..."
+          className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-sky-400 resize-none"
           rows={3}
         />
 
-        <div className="flex items-center justify-between mt-3">
+        <div className="flex items-center justify-between">
           <div className="flex gap-2">
             <button
               type="button"
-              className="p-2 rounded-md hover:bg-bulletin-100 transition"
+              className="p-2 rounded-full bg-white/5 border border-white/10 hover:border-sky-300 hover:text-sky-200 transition"
               title="Add image"
             >
-              <ImagePlus size={20} className="text-bulletin-600" />
+              <ImagePlus size={18} />
             </button>
             <button
               type="button"
-              className="p-2 rounded-md hover:bg-bulletin-100 transition"
+              className="p-2 rounded-full bg-white/5 border border-white/10 hover:border-sky-300 hover:text-sky-200 transition"
               title="Add video"
             >
-              <Video size={20} className="text-bulletin-600" />
+              <Video size={18} />
             </button>
           </div>
 
           <button
             type="submit"
             disabled={!content.trim() || isSubmitting}
-            className="bulletin-button disabled:opacity-50 disabled:cursor-not-allowed"
+            className="cta-button disabled:opacity-60 disabled:cursor-not-allowed"
           >
-            {isSubmitting ? 'Posting...' : 'Post'}
+            {isSubmitting ? 'Posting...' : 'Share' }
           </button>
         </div>
       </form>
