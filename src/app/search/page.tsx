@@ -2,17 +2,40 @@
 
 import { useState } from 'react'
 import { Navigation } from '@/components/Navigation'
-import { Search as SearchIcon, Users } from 'lucide-react'
+import { Search as SearchIcon, Users, Flame } from 'lucide-react'
 import Link from 'next/link'
 
 export default function SearchPage() {
   const [query, setQuery] = useState('')
-  const [results, setResults] = useState<any>({ users: [], boards: [] })
+  const [results, setResults] = useState<any>({ users: [], boards: [], trending: { boards: [], users: [], posts: [] } })
   const [isLoading, setIsLoading] = useState(false)
+
+  // load trending on first paint
+  useEffect(() => {
+    fetchTrending()
+  }, [])
+
+  const fetchTrending = async () => {
+    setIsLoading(true)
+    try {
+      const res = await fetch('/api/search')
+      if (res.ok) {
+        const data = await res.json()
+        setResults({ users: [], boards: [], trending: data.trending })
+      }
+    } catch (error) {
+      console.error('Error loading trending:', error)
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!query.trim()) return
+    if (!query.trim()) {
+      fetchTrending()
+      return
+    }
 
     setIsLoading(true)
 
@@ -59,6 +82,98 @@ export default function SearchPage() {
             </button>
           </form>
         </div>
+
+        {/* Trending */}
+        {results.trending && (results.trending.boards?.length || results.trending.users?.length || results.trending.posts?.length) && (
+          <div className="space-y-4">
+            <div className="flex items-center gap-2">
+              <Flame className="text-orange-400" size={18} />
+              <h2 className="text-2xl font-bold">Trending now</h2>
+            </div>
+
+            <div className="grid lg:grid-cols-3 gap-3">
+              <div className="glass-panel p-4 space-y-3">
+                <div className="flex items-center gap-2 text-sm text-muted">
+                  <span className="px-2 py-1 rounded-full bg-white/5 border border-white/10 text-white text-xs">Boards</span>
+                  <span>Most joined</span>
+                </div>
+                {results.trending.boards?.length === 0 ? (
+                  <p className="text-muted text-sm">No trending boards</p>
+                ) : (
+                  results.trending.boards.map((board: any) => (
+                    <Link key={board.id} href={`/boards/${board.id}`} className="block">
+                      <div className="flex items-center gap-3 p-2 rounded-xl hover:bg-white/5 transition">
+                        {board.image ? (
+                          <img src={board.image} alt={board.name} className="w-11 h-11 rounded-lg object-cover" />
+                        ) : (
+                          <div className="w-11 h-11 rounded-lg bg-gradient-to-br from-violet-500 to-sky-400 flex items-center justify-center">
+                            <Users className="text-white" size={20} />
+                          </div>
+                        )}
+                        <div className="min-w-0">
+                          <p className="font-semibold truncate">{board.name}</p>
+                          <p className="text-sm text-muted truncate">{board.description || 'Active discussions'}</p>
+                        </div>
+                      </div>
+                    </Link>
+                  ))
+                )}
+              </div>
+
+              <div className="glass-panel p-4 space-y-3">
+                <div className="flex items-center gap-2 text-sm text-muted">
+                  <span className="px-2 py-1 rounded-full bg-white/5 border border-white/10 text-white text-xs">People</span>
+                  <span>Gaining followers</span>
+                </div>
+                {results.trending.users?.length === 0 ? (
+                  <p className="text-muted text-sm">No trending people</p>
+                ) : (
+                  results.trending.users.map((user: any) => (
+                    <Link key={user.id} href={`/profile/${user.username || user.id}`} className="block">
+                      <div className="flex items-center gap-3 p-2 rounded-xl hover:bg-white/5 transition">
+                        {user.image ? (
+                          <img src={user.image} alt={user.name} className="w-10 h-10 rounded-full object-cover" />
+                        ) : (
+                          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-violet-500 to-sky-400 flex items-center justify-center text-white font-bold text-sm">
+                            {user.name?.[0] || 'U'}
+                          </div>
+                        )}
+                        <div className="min-w-0">
+                          <p className="font-semibold truncate">{user.name}</p>
+                          {user.username && <p className="text-sm text-muted truncate">@{user.username}</p>}
+                          {user.bio && <p className="text-sm text-muted line-clamp-1">{user.bio}</p>}
+                        </div>
+                      </div>
+                    </Link>
+                  ))
+                )}
+              </div>
+
+              <div className="glass-panel p-4 space-y-3">
+                <div className="flex items-center gap-2 text-sm text-muted">
+                  <span className="px-2 py-1 rounded-full bg-white/5 border border-white/10 text-white text-xs">Posts</span>
+                  <span>Most liked</span>
+                </div>
+                {results.trending.posts?.length === 0 ? (
+                  <p className="text-muted text-sm">No trending posts</p>
+                ) : (
+                  results.trending.posts.map((post: any) => (
+                    <div key={post.id} className="p-3 rounded-xl bg-white/5 border border-white/10 space-y-2">
+                      <div className="flex items-center gap-2 text-sm text-muted">
+                        <span className="font-semibold text-white">{post.user?.name || 'User'}</span>
+                        {post.bulletinBoard && (
+                          <span className="text-xs px-2 py-1 rounded-full bg-white/5 border border-white/10">{post.bulletinBoard.name}</span>
+                        )}
+                      </div>
+                      <p className="text-sm text-white/90 line-clamp-2">{post.content || 'Shared an update'}</p>
+                      <div className="text-xs text-muted">{post.likes?.length || 0} likes · {post.comments?.length || 0} comments</div>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Users Results */}
         {results.users.length > 0 && (

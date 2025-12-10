@@ -15,7 +15,59 @@ export async function GET(req: NextRequest) {
     const query = searchParams.get('q') || ''
 
     if (!query) {
-      return NextResponse.json({ users: [], boards: [] })
+      const [trendingBoards, trendingUsers, trendingPosts] = await Promise.all([
+        prisma.bulletinBoard.findMany({
+          take: 6,
+          orderBy: {
+            members: {
+              _count: 'desc'
+            }
+          },
+          include: {
+            members: true,
+          }
+        }),
+        prisma.user.findMany({
+          take: 6,
+          orderBy: {
+            followers: {
+              _count: 'desc'
+            }
+          },
+          select: {
+            id: true,
+            name: true,
+            username: true,
+            image: true,
+            bio: true,
+            followers: true,
+          }
+        }),
+        prisma.post.findMany({
+          take: 6,
+          orderBy: {
+            likes: {
+              _count: 'desc'
+            }
+          },
+          include: {
+            user: true,
+            bulletinBoard: true,
+            likes: true,
+            comments: true,
+          }
+        })
+      ])
+
+      return NextResponse.json({
+        users: [],
+        boards: [],
+        trending: {
+          boards: trendingBoards,
+          users: trendingUsers,
+          posts: trendingPosts,
+        }
+      })
     }
 
     const [users, boards] = await Promise.all([
