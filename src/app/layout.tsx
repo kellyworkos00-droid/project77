@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   description: 'A social media platform where real connections stick. Share, connect, and engage through digital bulletin boards.',
   keywords: 'social media, bulletin board, community, connections, messaging, streaks',
   icons: {
-    icon: '/logo.svg',
+    icon: '/logo.jpg',
   },
 }
 
