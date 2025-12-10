@@ -16,24 +16,28 @@ export function Navigation() {
 
   return (
     <>
-      {/* Top nav with logo - always visible */}
-      <nav className="sticky top-0 z-50 backdrop-blur-xl bg-black/40 border-b border-white/10">
-        <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between h-16">
-            <Link href="/feed" className="flex items-center gap-3 text-xl font-semibold text-white hover:text-sky-200 transition">
-              <div className="relative h-9 w-9 overflow-hidden rounded-lg ring-1 ring-white/10">
-                <Image
-                  src="/logo.png"
-                  alt="PinBoard"
-                  fill
-                  sizes="36px"
-                  className="object-cover"
-                />
-              </div>
-              <span className="hidden sm:inline tracking-tight">PinBoard</span>
-            </Link>
+      {/* Floating logo - always visible */}
+      <Link 
+        href="/feed" 
+        className="fixed top-4 left-4 z-50 flex items-center gap-3 text-xl font-semibold text-white hover:text-sky-200 transition"
+      >
+        <div className="relative h-10 w-10 overflow-hidden rounded-lg ring-2 ring-white/20 shadow-lg shadow-sky-900/50 backdrop-blur-xl bg-black/60">
+          <Image
+            src="/logo.png"
+            alt="PinBoard"
+            fill
+            sizes="40px"
+            className="object-cover"
+          />
+        </div>
+        <span className="hidden sm:inline tracking-tight backdrop-blur-xl bg-black/60 px-3 py-1.5 rounded-lg ring-1 ring-white/10">PinBoard</span>
+      </Link>
 
-            <div className="hidden md:flex items-center gap-4">
+      {/* Desktop navigation - hidden on mobile */}
+      <nav className="hidden md:block sticky top-0 z-40 backdrop-blur-xl bg-black/40 border-b border-white/10">
+        <div className="container mx-auto px-4">
+          <div className="flex items-center justify-end h-16">
+            <div className="flex items-center gap-4">
               <Link href="/feed" className={`flex items-center gap-2 text-muted hover:text-white transition ${isActive('/feed') ? 'text-white' : ''}`}>
                 <Home size={18} />
                 <span className="hidden md:inline text-sm font-medium">Home</span>
