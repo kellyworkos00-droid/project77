@@ -60,7 +60,7 @@ export default function SearchPage() {
   }
 
   return (
-    <div className="min-h-screen text-white bg-[radial-gradient(circle_at_20%_20%,rgba(124,58,237,0.18),transparent_32%),radial-gradient(circle_at_80%_0%,rgba(34,211,238,0.2),transparent_30%),linear-gradient(145deg,#0a0f1f,#0c1126_50%,#0a0e1c)]">
+    <div className="min-h-screen text-white overflow-x-hidden bg-[radial-gradient(circle_at_20%_20%,rgba(124,58,237,0.18),transparent_32%),radial-gradient(circle_at_80%_0%,rgba(34,211,238,0.2),transparent_30%),linear-gradient(145deg,#0a0f1f,#0c1126_50%,#0a0e1c)]">
       <Navigation />
       
       <main className="container mx-auto px-4 py-8 max-w-4xl space-y-8">
@@ -98,8 +98,8 @@ export default function SearchPage() {
               <h2 className="text-2xl font-bold">Trending now</h2>
             </div>
 
-            <div className="grid lg:grid-cols-4 gap-3">
-              <div className="glass-panel p-4 space-y-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+              <div className="glass-panel p-4 space-y-3 w-full">
                 <div className="flex items-center gap-2 text-sm text-muted">
                   <span className="px-2 py-1 rounded-full bg-white/5 border border-white/10 text-white text-xs">Hashtags</span>
                   <span>Hot topics</span>
@@ -111,7 +111,7 @@ export default function SearchPage() {
                     <button
                       key={tag.tag}
                       onClick={() => runSearch(`#${tag.tag.replace('#','')}`)}
-                      className="w-full text-left p-2 rounded-xl hover:bg-white/5 transition text-white flex items-center justify-between"
+                      className="w-full text-left p-2 rounded-xl hover:bg-white/5 transition text-white flex items-center justify-between break-words"
                     >
                       <span className="font-semibold">#{tag.tag.replace('#','')}</span>
                       <span className="text-xs text-muted">{tag.count}</span>
@@ -120,7 +120,7 @@ export default function SearchPage() {
                 )}
               </div>
 
-              <div className="glass-panel p-4 space-y-3">
+              <div className="glass-panel p-4 space-y-3 w-full">
                 <div className="flex items-center gap-2 text-sm text-muted">
                   <span className="px-2 py-1 rounded-full bg-white/5 border border-white/10 text-white text-xs">Boards</span>
                   <span>Most joined</span>
@@ -148,7 +148,7 @@ export default function SearchPage() {
                 )}
               </div>
 
-              <div className="glass-panel p-4 space-y-3">
+              <div className="glass-panel p-4 space-y-3 w-full">
                 <div className="flex items-center gap-2 text-sm text-muted">
                   <span className="px-2 py-1 rounded-full bg-white/5 border border-white/10 text-white text-xs">People</span>
                   <span>Gaining followers</span>
@@ -177,7 +177,7 @@ export default function SearchPage() {
                 )}
               </div>
 
-              <div className="glass-panel p-4 space-y-3">
+              <div className="glass-panel p-4 space-y-3 w-full">
                 <div className="flex items-center gap-2 text-sm text-muted">
                   <span className="px-2 py-1 rounded-full bg-white/5 border border-white/10 text-white text-xs">Posts</span>
                   <span>Most liked</span>
