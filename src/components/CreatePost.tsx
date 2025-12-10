@@ -47,7 +47,7 @@ export function CreatePost({ userId, bulletinBoardId }: CreatePostProps) {
         <textarea
           value={content}
           onChange={(e) => setContent(e.target.value)}
-          placeholder="Start a conversation..."
+          placeholder="Start a conversation... add #hashtags and @mentions"
           className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-sky-400 resize-none"
           rows={3}
         />

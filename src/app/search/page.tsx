@@ -1,13 +1,16 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Navigation } from '@/components/Navigation'
 import { Search as SearchIcon, Users, Flame } from 'lucide-react'
 import Link from 'next/link'
+import { PostCard } from '@/components/PostCard'
+import { useSession } from 'next-auth/react'
 
 export default function SearchPage() {
   const [query, setQuery] = useState('')
-  const [results, setResults] = useState<any>({ users: [], boards: [], trending: { boards: [], users: [], posts: [] } })
+  const { data: session } = useSession()
+  const [results, setResults] = useState<any>({ users: [], boards: [], posts: [], trending: { boards: [], users: [], posts: [], hashtags: [] } })
   const [isLoading, setIsLoading] = useState(false)
 
   // load trending on first paint
@@ -15,13 +18,34 @@ export default function SearchPage() {
     fetchTrending()
   }, [])
 
+  const runSearch = async (term: string) => {
+    setQuery(term)
+    if (!term.trim()) {
+      fetchTrending()
+      return
+    }
+
+    setIsLoading(true)
+    try {
+      const res = await fetch(`/api/search?q=${encodeURIComponent(term)}`)
+      if (res.ok) {
+        const data = await res.json()
+        setResults({ ...data, trending: results.trending })
+      }
+    } catch (error) {
+      console.error('Error searching:', error)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
   const fetchTrending = async () => {
     setIsLoading(true)
     try {
       const res = await fetch('/api/search')
       if (res.ok) {
         const data = await res.json()
-        setResults({ users: [], boards: [], trending: data.trending })
+        setResults({ users: [], boards: [], posts: [], trending: data.trending })
       }
     } catch (error) {
       console.error('Error loading trending:', error)
@@ -32,24 +56,7 @@ export default function SearchPage() {
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!query.trim()) {
-      fetchTrending()
-      return
-    }
-
-    setIsLoading(true)
-
-    try {
-      const res = await fetch(`/api/search?q=${encodeURIComponent(query)}`)
-      if (res.ok) {
-        const data = await res.json()
-        setResults(data)
-      }
-    } catch (error) {
-      console.error('Error searching:', error)
-    } finally {
-      setIsLoading(false)
-    }
+    runSearch(query)
   }
 
   return (
@@ -84,14 +91,35 @@ export default function SearchPage() {
         </div>
 
         {/* Trending */}
-        {results.trending && (results.trending.boards?.length || results.trending.users?.length || results.trending.posts?.length) && (
+        {results.trending && (results.trending.boards?.length || results.trending.users?.length || results.trending.posts?.length || results.trending.hashtags?.length) && (
           <div className="space-y-4">
             <div className="flex items-center gap-2">
               <Flame className="text-orange-400" size={18} />
               <h2 className="text-2xl font-bold">Trending now</h2>
             </div>
 
-            <div className="grid lg:grid-cols-3 gap-3">
+            <div className="grid lg:grid-cols-4 gap-3">
+              <div className="glass-panel p-4 space-y-3">
+                <div className="flex items-center gap-2 text-sm text-muted">
+                  <span className="px-2 py-1 rounded-full bg-white/5 border border-white/10 text-white text-xs">Hashtags</span>
+                  <span>Hot topics</span>
+                </div>
+                {results.trending.hashtags?.length === 0 ? (
+                  <p className="text-muted text-sm">No trending hashtags</p>
+                ) : (
+                  results.trending.hashtags.map((tag: any) => (
+                    <button
+                      key={tag.tag}
+                      onClick={() => runSearch(`#${tag.tag.replace('#','')}`)}
+                      className="w-full text-left p-2 rounded-xl hover:bg-white/5 transition text-white flex items-center justify-between"
+                    >
+                      <span className="font-semibold">#{tag.tag.replace('#','')}</span>
+                      <span className="text-xs text-muted">{tag.count}</span>
+                    </button>
+                  ))
+                )}
+              </div>
+
               <div className="glass-panel p-4 space-y-3">
                 <div className="flex items-center gap-2 text-sm text-muted">
                   <span className="px-2 py-1 rounded-full bg-white/5 border border-white/10 text-white text-xs">Boards</span>
@@ -231,8 +259,20 @@ export default function SearchPage() {
           </div>
         )}
 
+        {/* Hashtag Posts Results */}
+        {results.posts.length > 0 && (
+          <div className="space-y-4">
+            <h2 className="text-2xl font-bold flex items-center gap-2">Posts for {query}</h2>
+            <div className="space-y-4">
+              {results.posts.map((post: any) => (
+                <PostCard key={post.id} post={post} currentUserId={session?.user.id || ''} />
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* No Results */}
-        {query && !isLoading && results.users.length === 0 && results.boards.length === 0 && (
+        {query && !isLoading && results.users.length === 0 && results.boards.length === 0 && results.posts.length === 0 && (
           <div className="glass-panel text-center py-10">
             <h3 className="text-xl font-bold mb-2">No results found</h3>
             <p className="text-muted">Try different keywords.</p>

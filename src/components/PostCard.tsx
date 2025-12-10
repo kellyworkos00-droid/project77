@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useMemo, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { formatDistanceToNow } from 'date-fns'
@@ -13,6 +13,7 @@ interface PostCardProps {
 
 export function PostCard({ post, currentUserId }: PostCardProps) {
   const router = useRouter()
+  const videoRef = useRef<HTMLVideoElement | null>(null)
   const [isLiked, setIsLiked] = useState(
     post.likes.some((like: any) => like.userId === currentUserId)
   )
@@ -86,6 +87,46 @@ export function PostCard({ post, currentUserId }: PostCardProps) {
     }
   }
 
+  const renderedContent = useMemo(() => {
+    const parts = post.content.split(/(#[A-Za-z0-9_]+|@[A-Za-z0-9_]+)/g)
+    return parts.map((part: string, idx: number) => {
+      if (part.startsWith('#')) {
+        const tag = part.slice(1)
+        return (
+          <Link
+            key={idx}
+            href={`/search?q=%23${tag}`}
+            className="text-sky-300 hover:text-sky-100 font-semibold"
+          >
+            {part}
+          </Link>
+        )
+      }
+      if (part.startsWith('@')) {
+        const user = part.slice(1)
+        return (
+          <Link
+            key={idx}
+            href={`/profile/${user}`}
+            className="text-sky-300 hover:text-sky-100 font-semibold"
+          >
+            {part}
+          </Link>
+        )
+      }
+      return <span key={idx}>{part}</span>
+    })
+  }, [post.content])
+
+  const focusNextVideo = () => {
+    const videos = Array.from(document.querySelectorAll<HTMLVideoElement>('video[data-feed-video]'))
+    const idx = videos.findIndex((v) => v === videoRef.current)
+    if (idx >= 0 && idx + 1 < videos.length) {
+      videos[idx + 1].scrollIntoView({ behavior: 'smooth', block: 'center' })
+      videos[idx + 1].play().catch(() => {})
+    }
+  }
+
   return (
     <div className="glass-panel p-5 space-y-4">
       {/* Header */}
@@ -123,7 +164,9 @@ export function PostCard({ post, currentUserId }: PostCardProps) {
       </div>
 
       {/* Content */}
-      <p className="text-lg leading-relaxed text-white/90 whitespace-pre-wrap">{post.content}</p>
+      <p className="text-lg leading-relaxed text-white/90 whitespace-pre-wrap break-words">
+        {renderedContent}
+      </p>
 
       {/* Media */}
       {post.mediaUrl && (
@@ -131,7 +174,18 @@ export function PostCard({ post, currentUserId }: PostCardProps) {
           {post.mediaType === 'image' ? (
             <img src={post.mediaUrl} alt="Post media" className="w-full" />
           ) : post.mediaType === 'video' ? (
-            <video src={post.mediaUrl} controls className="w-full" />
+            <div className="relative">
+              <video
+                ref={videoRef}
+                src={post.mediaUrl}
+                controls
+                className="w-full"
+                data-feed-video
+                onClick={focusNextVideo}
+                onEnded={focusNextVideo}
+              />
+              <div className="absolute bottom-2 right-2 text-[11px] bg-black/60 text-white px-2 py-1 rounded-full">Tap to skip</div>
+            </div>
           ) : null}
         </div>
       )}

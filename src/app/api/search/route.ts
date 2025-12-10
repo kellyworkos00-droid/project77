@@ -3,6 +3,11 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 
+const extractHashtags = (text: string) => {
+  const tags = text.match(/#([A-Za-z0-9_]+)/g) || []
+  return tags.map((t) => t.toLowerCase())
+}
+
 export async function GET(req: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
@@ -15,7 +20,7 @@ export async function GET(req: NextRequest) {
     const query = searchParams.get('q') || ''
 
     if (!query) {
-      const [trendingBoards, trendingUsers, trendingPosts] = await Promise.all([
+      const [trendingBoards, trendingUsers, trendingPosts, recentPosts] = await Promise.all([
         prisma.bulletinBoard.findMany({
           take: 6,
           orderBy: {
@@ -56,8 +61,24 @@ export async function GET(req: NextRequest) {
             likes: true,
             comments: true,
           }
+        }),
+        prisma.post.findMany({
+          take: 200,
+          orderBy: { createdAt: 'desc' },
+          select: { content: true }
         })
       ])
+
+      const hashtagCounts: Record<string, number> = {}
+      recentPosts.forEach((p) => {
+        extractHashtags(p.content || '').forEach((tag) => {
+          hashtagCounts[tag] = (hashtagCounts[tag] || 0) + 1
+        })
+      })
+      const trendingHashtags = Object.entries(hashtagCounts)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 8)
+        .map(([tag, count]) => ({ tag, count }))
 
       return NextResponse.json({
         users: [],
@@ -66,8 +87,38 @@ export async function GET(req: NextRequest) {
           boards: trendingBoards,
           users: trendingUsers,
           posts: trendingPosts,
+          hashtags: trendingHashtags,
         }
       })
+    }
+
+    // Hashtag search
+    if (query.startsWith('#')) {
+      const tag = query.slice(1)
+      const posts = await prisma.post.findMany({
+        where: {
+          content: {
+            contains: `#${tag}`,
+            mode: 'insensitive'
+          }
+        },
+        include: {
+          user: true,
+          bulletinBoard: true,
+          likes: true,
+          comments: {
+            include: { user: true }
+          },
+          reposts: true,
+          shares: true,
+        },
+        orderBy: {
+          createdAt: 'desc'
+        },
+        take: 20
+      })
+
+      return NextResponse.json({ users: [], boards: [], posts })
     }
 
     const [users, boards] = await Promise.all([
