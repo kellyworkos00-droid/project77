@@ -13,20 +13,20 @@ export default async function FeedPage() {
     redirect('/auth/signin')
   }
 
-  // Get posts from bulletin boards the user is a member of, plus their own posts
+  // Get the users that the current user follows
+  const following = await prisma.follow.findMany({
+    where: { followerId: session.user.id },
+    select: { followingId: true }
+  })
+
+  const followingIds = following.map(f => f.followingId)
+
+  // Get posts ONLY from people you follow + your own posts (chronological, no algorithm)
   const posts = await prisma.post.findMany({
     where: {
       OR: [
         { userId: session.user.id },
-        {
-          bulletinBoard: {
-            members: {
-              some: {
-                userId: session.user.id
-              }
-            }
-          }
-        }
+        { userId: { in: followingIds } }
       ]
     },
     include: {
@@ -47,7 +47,7 @@ export default async function FeedPage() {
     orderBy: {
       createdAt: 'desc'
     },
-    take: 50
+    take: 100
   })
 
   return (
@@ -63,7 +63,7 @@ export default async function FeedPage() {
           {posts.length === 0 ? (
             <div className="glass-panel text-center py-12">
               <h2 className="text-2xl font-bold mb-2">No posts yet</h2>
-              <p className="text-muted">Join some boards or create your first post.</p>
+              <p className="text-muted">Follow people to see their posts here - no algorithm, just chronological updates from those you choose to follow.</p>
             </div>
           ) : (
             posts.map((post: any) => (
