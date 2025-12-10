@@ -122,7 +122,7 @@ export default async function StreakPage() {
           <div className="bulletin-pin"></div>
           
           <div className="space-y-3">
-            {topStreaks.map((s, index) => (
+            {topStreaks.map((s: any, index: number) => (
               <div
                 key={s.id}
                 className={`flex items-center gap-4 p-3 rounded-lg ${

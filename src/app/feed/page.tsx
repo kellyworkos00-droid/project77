@@ -67,7 +67,7 @@ export default async function FeedPage() {
               <p className="text-gray-600">Join some bulletin boards or create your first post!</p>
             </div>
           ) : (
-            posts.map((post) => (
+            posts.map((post: any) => (
               <PostCard key={post.id} post={post} currentUserId={session.user.id} />
             ))
           )}

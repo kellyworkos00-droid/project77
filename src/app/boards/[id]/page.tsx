@@ -52,7 +52,7 @@ export default async function BoardPage({ params }: { params: Promise<{ id: stri
     notFound()
   }
 
-  const isMember = board.members.some(member => member.userId === session.user.id)
+  const isMember = board.members.some((member: any) => member.userId === session.user.id)
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-bulletin-50 via-bulletin-100 to-bulletin-200">
@@ -92,7 +92,7 @@ export default async function BoardPage({ params }: { params: Promise<{ id: stri
           <div className="mt-6 pt-6 border-t border-gray-200">
             <h3 className="text-sm font-medium text-gray-700 mb-3">Members</h3>
             <div className="flex flex-wrap gap-2">
-              {board.members.slice(0, 10).map((member) => (
+              {board.members.slice(0, 10).map((member: any) => (
                 <div
                   key={member.id}
                   className="flex items-center gap-2 bg-bulletin-50 rounded-full px-3 py-1"
@@ -128,7 +128,7 @@ export default async function BoardPage({ params }: { params: Promise<{ id: stri
                   <p className="text-gray-600">Be the first to post in this board!</p>
                 </div>
               ) : (
-                board.posts.map((post) => (
+                board.posts.map((post: any) => (
                   <PostCard key={post.id} post={post} currentUserId={session.user.id} />
                 ))
               )}

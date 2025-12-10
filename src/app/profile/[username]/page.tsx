@@ -53,7 +53,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ userna
   }
 
   const isOwnProfile = user.id === session.user.id
-  const isFollowing = user.followers.some(f => f.followerId === session.user.id)
+  const isFollowing = user.followers.some((f: any) => f.followerId === session.user.id)
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-bulletin-50 via-bulletin-100 to-bulletin-200">
@@ -119,7 +119,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ userna
               <p className="text-gray-600">{isOwnProfile ? 'Share your first post!' : 'No posts to show'}</p>
             </div>
           ) : (
-            user.posts.map((post) => (
+            user.posts.map((post: any) => (
               <PostCard key={post.id} post={post} currentUserId={session.user.id} />
             ))
           )}

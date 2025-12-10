@@ -30,7 +30,7 @@ export async function GET(req: NextRequest) {
 
     // Extract unique users
     const userMap = new Map()
-    messages.forEach(msg => {
+    messages.forEach((msg: any) => {
       const otherUser = msg.senderId === session.user.id ? msg.receiver : msg.sender
       if (!userMap.has(otherUser.id)) {
         userMap.set(otherUser.id, {

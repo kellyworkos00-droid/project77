@@ -42,7 +42,7 @@ export default async function BoardsPage() {
   })
 
   const isMember = (boardId: string) => {
-    return myBoards.some(board => board.id === boardId)
+    return myBoards.some((board: any) => board.id === boardId)
   }
 
   return (
@@ -64,7 +64,7 @@ export default async function BoardsPage() {
           <div className="mb-8">
             <h2 className="text-2xl font-bold text-bulletin-800 mb-4">My Boards</h2>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {myBoards.map((board) => (
+              {myBoards.map((board: any) => (
                 <Link key={board.id} href={`/boards/${board.id}`}>
                   <div className="bulletin-card relative hover:shadow-lg transition cursor-pointer h-full">
                     <div className="bulletin-pin"></div>
@@ -101,7 +101,7 @@ export default async function BoardsPage() {
         <div>
           <h2 className="text-2xl font-bold text-bulletin-800 mb-4">Discover Boards</h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {allBoards.filter(board => !isMember(board.id)).map((board) => (
+            {allBoards.filter((board: any) => !isMember(board.id)).map((board: any) => (
               <Link key={board.id} href={`/boards/${board.id}`}>
                 <div className="bulletin-card relative hover:shadow-lg transition cursor-pointer h-full">
                   <div className="bulletin-pin"></div>
