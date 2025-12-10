@@ -1,0 +1,48 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #fef8f0;
+  --foreground: #1a1a1a;
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+}
+
+/* Bulletin Board Aesthetic */
+.bulletin-card {
+  @apply bg-white border-2 border-bulletin-800 shadow-md rounded-lg p-4;
+  box-shadow: 4px 4px 0px rgba(183, 73, 32, 0.3);
+}
+
+.bulletin-button {
+  @apply bg-bulletin-600 hover:bg-bulletin-700 text-white font-bold py-2 px-4 rounded-lg transition-all;
+  box-shadow: 3px 3px 0px rgba(183, 73, 32, 0.4);
+}
+
+.bulletin-button:active {
+  box-shadow: 1px 1px 0px rgba(183, 73, 32, 0.4);
+  transform: translate(2px, 2px);
+}
+
+.bulletin-pin {
+  @apply absolute -top-3 right-4;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #ff6b6b, #c92a2a);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.bulletin-tape {
+  @apply absolute -top-2 left-1/2 transform -translate-x-1/2;
+  width: 60px;
+  height: 20px;
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
