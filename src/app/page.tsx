@@ -2,7 +2,7 @@ import { redirect } from 'next/navigation'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import Link from 'next/link'
-import { Logo } from '@/components/Logo'
+import Image from 'next/image'
 
 export default async function Home() {
   const session = await getServerSession(authOptions)
@@ -22,7 +22,16 @@ export default async function Home() {
             </div>
 
             <div className="flex items-center gap-4">
-              <Logo size={64} />
+              <div className="relative h-16 w-16 overflow-hidden rounded-2xl ring-2 ring-white/10 shadow-lg shadow-black/40">
+                <Image
+                  src="/logo.png"
+                  alt="PinBoard logo"
+                  fill
+                  priority
+                  sizes="64px"
+                  className="object-cover"
+                />
+              </div>
               <div>
                 <p className="text-muted text-sm uppercase tracking-[0.18em]">PinBoard</p>
                 <h1 className="text-4xl md:text-5xl font-bold leading-tight">Social that feels alive.</h1>
