@@ -13,7 +13,8 @@ export const authOptions: NextAuthOptions = {
       clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
       authorization: {
         params: {
-          prompt: "consent",
+          // Force account picker to show so users can pick/change Google accounts
+          prompt: "select_account",
           access_type: "offline",
           response_type: "code"
         }
