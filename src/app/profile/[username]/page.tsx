@@ -56,53 +56,51 @@ export default async function ProfilePage({ params }: { params: Promise<{ userna
   const isFollowing = user.followers.some((f: any) => f.followerId === session.user.id)
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-bulletin-50 via-bulletin-100 to-bulletin-200">
+    <div className="min-h-screen text-white bg-[radial-gradient(circle_at_20%_20%,rgba(124,58,237,0.18),transparent_32%),radial-gradient(circle_at_80%_0%,rgba(34,211,238,0.2),transparent_30%),linear-gradient(145deg,#0a0f1f,#0c1126_50%,#0a0e1c)]">
       <Navigation />
       
-      <main className="container mx-auto px-4 py-8 max-w-4xl">
+      <main className="container mx-auto px-4 py-8 max-w-4xl space-y-6">
         {/* Profile Header */}
-        <div className="bulletin-card mb-8 relative">
-          <div className="bulletin-pin"></div>
-          <div className="bulletin-tape"></div>
-          
-          <div className="flex items-start gap-6 mt-2">
+        <div className="glass-panel p-6">
+          <div className="flex items-start gap-6">
             {user.image ? (
               <img src={user.image} alt={user.name || 'User'} className="w-32 h-32 rounded-full object-cover" />
             ) : (
-              <div className="w-32 h-32 rounded-full bg-bulletin-400 flex items-center justify-center text-white text-5xl font-bold">
+              <div className="w-32 h-32 rounded-full bg-white/10 flex items-center justify-center text-white text-5xl font-bold">
                 {user.name?.[0] || 'U'}
               </div>
             )}
             
-            <div className="flex-1">
+            <div className="flex-1 space-y-2">
               <div className="flex items-start justify-between">
                 <div>
-                  <h1 className="text-3xl font-bold text-bulletin-900">{user.name}</h1>
+                  <h1 className="text-3xl font-bold">{user.name}</h1>
                   {user.username && (
-                    <p className="text-gray-600">@{user.username}</p>
+                    <p className="text-muted">@{user.username}</p>
                   )}
                 </div>
                 {!isOwnProfile && <FollowButton userId={user.id} initialFollowing={isFollowing} />}
               </div>
 
               {user.bio && (
-                <p className="text-gray-700 mt-3">{user.bio}</p>
+                <p className="text-muted">{user.bio}</p>
               )}
 
-              <div className="flex items-center gap-4 mt-3 text-sm text-gray-600">
+              <div className="flex items-center gap-4 text-sm text-muted">
                 <span><strong>{user.followers.length}</strong> followers</span>
                 <span><strong>{user.following.length}</strong> following</span>
                 <span><strong>{user.posts.length}</strong> posts</span>
               </div>
 
-              <div className="flex items-center gap-2 mt-2 text-sm text-gray-600">
+              <div className="flex items-center gap-2 text-sm text-muted">
                 <Calendar size={16} />
                 <span>Joined {formatDistanceToNow(new Date(user.createdAt), { addSuffix: true })}</span>
               </div>
 
               {user.streaks && user.streaks.length > 0 && (
-                <div className="mt-3 inline-block bg-orange-100 px-3 py-1 rounded-full">
-                  <span className="text-orange-700 font-bold">🔥 {user.streaks[0].currentStreak} day streak</span>
+                <div className="mt-2 inline-flex items-center gap-2 bg-white/10 border border-white/10 px-3 py-1 rounded-full">
+                  <span className="text-lg">🔥</span>
+                  <span className="font-semibold text-white">{user.streaks[0].currentStreak} day streak</span>
                 </div>
               )}
             </div>
@@ -110,19 +108,20 @@ export default async function ProfilePage({ params }: { params: Promise<{ userna
         </div>
 
         {/* Posts */}
-        <h2 className="text-2xl font-bold text-bulletin-900 mb-6">Posts</h2>
-        <div className="space-y-6">
-          {user.posts.length === 0 ? (
-            <div className="bulletin-card text-center relative py-12">
-              <div className="bulletin-pin"></div>
-              <h3 className="text-xl font-bold text-bulletin-900 mb-2">No posts yet</h3>
-              <p className="text-gray-600">{isOwnProfile ? 'Share your first post!' : 'No posts to show'}</p>
-            </div>
-          ) : (
-            user.posts.map((post: any) => (
-              <PostCard key={post.id} post={post} currentUserId={session.user.id} />
-            ))
-          )}
+        <div className="space-y-4">
+          <h2 className="text-2xl font-bold">Posts</h2>
+          <div className="space-y-6">
+            {user.posts.length === 0 ? (
+              <div className="glass-panel text-center py-12">
+                <h3 className="text-xl font-bold mb-2">No posts yet</h3>
+                <p className="text-muted">{isOwnProfile ? 'Share your first post!' : 'No posts to show'}</p>
+              </div>
+            ) : (
+              user.posts.map((post: any) => (
+                <PostCard key={post.id} post={post} currentUserId={session.user.id} />
+              ))
+            )}
+          </div>
         </div>
       </main>
     </div>

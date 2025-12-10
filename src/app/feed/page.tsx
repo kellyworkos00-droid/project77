@@ -51,20 +51,19 @@ export default async function FeedPage() {
   })
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-bulletin-50 via-bulletin-100 to-bulletin-200">
+    <div className="min-h-screen text-white bg-[radial-gradient(circle_at_20%_20%,rgba(124,58,237,0.18),transparent_32%),radial-gradient(circle_at_80%_0%,rgba(34,211,238,0.2),transparent_30%),linear-gradient(145deg,#0a0f1f,#0c1126_50%,#0a0e1c)]">
       <Navigation />
       
-      <main className="container mx-auto px-4 py-8 max-w-3xl">
-        <div className="mb-8">
+      <main className="container mx-auto px-4 py-8 max-w-3xl space-y-6">
+        <div>
           <CreatePost userId={session.user.id} />
         </div>
 
         <div className="space-y-6">
           {posts.length === 0 ? (
-            <div className="bulletin-card text-center relative py-12">
-              <div className="bulletin-pin"></div>
-              <h2 className="text-2xl font-bold text-bulletin-900 mb-2">No posts yet</h2>
-              <p className="text-gray-600">Join some bulletin boards or create your first post!</p>
+            <div className="glass-panel text-center py-12">
+              <h2 className="text-2xl font-bold mb-2">No posts yet</h2>
+              <p className="text-muted">Join some boards or create your first post.</p>
             </div>
           ) : (
             posts.map((post: any) => (

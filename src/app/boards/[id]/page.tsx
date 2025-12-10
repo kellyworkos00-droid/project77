@@ -55,30 +55,27 @@ export default async function BoardPage({ params }: { params: Promise<{ id: stri
   const isMember = board.members.some((member: any) => member.userId === session.user.id)
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-bulletin-50 via-bulletin-100 to-bulletin-200">
+    <div className="min-h-screen text-white bg-[radial-gradient(circle_at_20%_20%,rgba(124,58,237,0.18),transparent_32%),radial-gradient(circle_at_80%_0%,rgba(34,211,238,0.2),transparent_30%),linear-gradient(145deg,#0a0f1f,#0c1126_50%,#0a0e1c)]">
       <Navigation />
       
-      <main className="container mx-auto px-4 py-8 max-w-4xl">
+      <main className="container mx-auto px-4 py-8 max-w-4xl space-y-8">
         {/* Board Header */}
-        <div className="bulletin-card mb-8 relative">
-          <div className="bulletin-pin"></div>
-          <div className="bulletin-tape"></div>
-          
-          <div className="flex items-start gap-4 mt-2">
+        <div className="glass-panel p-6">
+          <div className="flex items-start gap-4">
             {board.image ? (
               <img src={board.image} alt={board.name} className="w-24 h-24 rounded-lg object-cover" />
             ) : (
-              <div className="w-24 h-24 rounded-lg bg-bulletin-400 flex items-center justify-center">
-                <Users className="text-white" size={48} />
+              <div className="w-24 h-24 rounded-lg bg-white/10 flex items-center justify-center">
+                <Users className="text-white" size={40} />
               </div>
             )}
             
-            <div className="flex-1">
-              <h1 className="text-3xl font-bold text-bulletin-900 mb-2">{board.name}</h1>
+            <div className="flex-1 space-y-2">
+              <h1 className="text-3xl font-bold">{board.name}</h1>
               {board.description && (
-                <p className="text-gray-700 mb-3">{board.description}</p>
+                <p className="text-muted">{board.description}</p>
               )}
-              <div className="flex items-center gap-4 text-sm text-gray-600">
+              <div className="flex items-center gap-3 text-sm text-muted">
                 <span>{board.members.length} members</span>
                 <span>•</span>
                 <span>{board.posts.length} posts</span>
@@ -89,26 +86,26 @@ export default async function BoardPage({ params }: { params: Promise<{ id: stri
           </div>
 
           {/* Members */}
-          <div className="mt-6 pt-6 border-t border-gray-200">
-            <h3 className="text-sm font-medium text-gray-700 mb-3">Members</h3>
+          <div className="mt-6 pt-6 border-t border-white/10">
+            <h3 className="text-sm font-semibold text-white mb-3">Members</h3>
             <div className="flex flex-wrap gap-2">
               {board.members.slice(0, 10).map((member: any) => (
                 <div
                   key={member.id}
-                  className="flex items-center gap-2 bg-bulletin-50 rounded-full px-3 py-1"
+                  className="flex items-center gap-2 bg-white/5 border border-white/10 rounded-full px-3 py-1"
                   title={member.user.name || 'User'}
                 >
-                  <div className="w-6 h-6 rounded-full bg-bulletin-400 flex items-center justify-center text-white text-xs font-bold">
+                  <div className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center text-white text-xs font-bold">
                     {member.user.name?.[0] || 'U'}
                   </div>
-                  <span className="text-sm">{member.user.name}</span>
+                  <span className="text-sm text-white">{member.user.name}</span>
                   {member.role === 'admin' && (
-                    <span className="text-xs bg-bulletin-600 text-white px-2 py-0.5 rounded">Admin</span>
+                    <span className="text-xs bg-white/15 text-white px-2 py-0.5 rounded">Admin</span>
                   )}
                 </div>
               ))}
               {board.members.length > 10 && (
-                <span className="text-sm text-gray-600">+{board.members.length - 10} more</span>
+                <span className="text-sm text-muted">+{board.members.length - 10} more</span>
               )}
             </div>
           </div>
@@ -116,16 +113,15 @@ export default async function BoardPage({ params }: { params: Promise<{ id: stri
 
         {isMember ? (
           <>
-            <div className="mb-8">
+            <div>
               <CreatePost userId={session.user.id} bulletinBoardId={board.id} />
             </div>
 
             <div className="space-y-6">
               {board.posts.length === 0 ? (
-                <div className="bulletin-card text-center relative py-12">
-                  <div className="bulletin-pin"></div>
-                  <h2 className="text-2xl font-bold text-bulletin-900 mb-2">No posts yet</h2>
-                  <p className="text-gray-600">Be the first to post in this board!</p>
+                <div className="glass-panel text-center py-12">
+                  <h2 className="text-2xl font-bold mb-2">No posts yet</h2>
+                  <p className="text-muted">Be the first to post in this board.</p>
                 </div>
               ) : (
                 board.posts.map((post: any) => (
@@ -135,10 +131,9 @@ export default async function BoardPage({ params }: { params: Promise<{ id: stri
             </div>
           </>
         ) : (
-          <div className="bulletin-card text-center relative py-12">
-            <div className="bulletin-pin"></div>
-            <h2 className="text-2xl font-bold text-bulletin-900 mb-2">Join to see posts</h2>
-            <p className="text-gray-600 mb-4">Become a member to view and create posts in this board</p>
+          <div className="glass-panel text-center py-12">
+            <h2 className="text-2xl font-bold mb-2">Join to see posts</h2>
+            <p className="text-muted mb-4">Become a member to view and create posts in this board.</p>
             <JoinButton boardId={board.id} initialJoined={false} />
           </div>
         )}

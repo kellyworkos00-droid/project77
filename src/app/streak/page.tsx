@@ -78,80 +78,68 @@ export default async function StreakPage() {
   })
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-bulletin-50 via-bulletin-100 to-bulletin-200">
+    <div className="min-h-screen text-white bg-[radial-gradient(circle_at_20%_20%,rgba(124,58,237,0.18),transparent_32%),radial-gradient(circle_at_80%_0%,rgba(34,211,238,0.2),transparent_30%),linear-gradient(145deg,#0a0f1f,#0c1126_50%,#0a0e1c)]">
       <Navigation />
       
-      <main className="container mx-auto px-4 py-8 max-w-4xl">
-        <h1 className="text-4xl font-bold text-bulletin-900 mb-8">Your Streak</h1>
+      <main className="container mx-auto px-4 py-8 max-w-4xl space-y-8">
+        <h1 className="text-4xl font-bold mb-4">Your Streak</h1>
 
         {/* Current Streak */}
-        <div className="bulletin-card mb-8 relative text-center">
-          <div className="bulletin-pin"></div>
-          <div className="bulletin-tape"></div>
-          
-          <div className="mt-2">
-            <Flame className="mx-auto text-orange-500 mb-4" size={64} />
-            <h2 className="text-6xl font-bold text-bulletin-900 mb-2">
-              {streak.currentStreak}
-            </h2>
-            <p className="text-xl text-gray-600 mb-6">Day Streak</p>
-            
-            <div className="grid grid-cols-2 gap-4">
-              <div className="bg-bulletin-50 rounded-lg p-4">
-                <Award className="mx-auto text-bulletin-600 mb-2" size={32} />
-                <p className="text-sm text-gray-600">Longest Streak</p>
-                <p className="text-2xl font-bold text-bulletin-900">{streak.longestStreak}</p>
-              </div>
-              
-              <div className="bg-bulletin-50 rounded-lg p-4">
-                <TrendingUp className="mx-auto text-bulletin-600 mb-2" size={32} />
-                <p className="text-sm text-gray-600">Keep Going!</p>
-                <p className="text-2xl font-bold text-bulletin-900">🔥</p>
-              </div>
-            </div>
-
-            <p className="mt-6 text-gray-600">
-              Come back tomorrow to continue your streak!
-            </p>
+        <div className="glass-panel p-6 text-center space-y-4">
+          <Flame className="mx-auto text-orange-400" size={56} />
+          <div>
+            <h2 className="text-5xl font-bold">{streak.currentStreak}</h2>
+            <p className="text-muted">Day Streak</p>
           </div>
+          <div className="grid grid-cols-2 gap-4 text-left">
+            <div className="bg-white/5 border border-white/10 rounded-xl p-4">
+              <Award className="text-sky-300 mb-2" size={28} />
+              <p className="text-sm text-muted">Longest Streak</p>
+              <p className="text-2xl font-bold">{streak.longestStreak}</p>
+            </div>
+            <div className="bg-white/5 border border-white/10 rounded-xl p-4">
+              <TrendingUp className="text-emerald-300 mb-2" size={28} />
+              <p className="text-sm text-muted">Keep going</p>
+              <p className="text-2xl font-bold">🔥</p>
+            </div>
+          </div>
+          <p className="text-muted">Come back tomorrow to continue your streak.</p>
         </div>
 
         {/* Leaderboard */}
-        <h2 className="text-2xl font-bold text-bulletin-900 mb-4">Leaderboard</h2>
-        <div className="bulletin-card relative">
-          <div className="bulletin-pin"></div>
-          
-          <div className="space-y-3">
+        <div className="space-y-4">
+          <h2 className="text-2xl font-bold">Leaderboard</h2>
+          <div className="glass-panel p-5 space-y-3">
             {topStreaks.map((s: any, index: number) => (
               <div
                 key={s.id}
                 className={`flex items-center gap-4 p-3 rounded-lg ${
-                  s.userId === session.user.id ? 'bg-bulletin-50 border-2 border-bulletin-600' : 'bg-gray-50'
+                  s.userId === session.user.id ? 'bg-white/8 border border-white/15' : 'bg-white/4 border border-white/8'
                 }`}
               >
                 <div className="w-8 text-center">
-                  <span className="text-2xl font-bold text-bulletin-900">
+                  <span className="text-xl font-bold">
                     {index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `#${index + 1}`}
                   </span>
                 </div>
                 
-                <div className="w-10 h-10 rounded-full bg-bulletin-400 flex items-center justify-center text-white font-bold">
+                <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white font-bold">
                   {s.user.name?.[0] || 'U'}
                 </div>
                 
                 <div className="flex-1">
-                  <p className="font-bold text-bulletin-900">{s.user.name}</p>
-                  {s.user.username && <p className="text-sm text-gray-600">@{s.user.username}</p>}
+                  <p className="font-semibold text-white">{s.user.name}</p>
+                  {s.user.username && <p className="text-sm text-muted">@{s.user.username}</p>}
                 </div>
                 
                 <div className="text-right">
-                  <p className="text-2xl font-bold text-orange-500">🔥 {s.currentStreak}</p>
-                  <p className="text-xs text-gray-600">Current</p>
+                  <p className="text-xl font-bold text-orange-400">🔥 {s.currentStreak}</p>
+                  <p className="text-xs text-muted">Current</p>
                 </div>
                 
                 <div className="text-right">
-                  <p className="text-lg font-bold text-bulletin-900">{s.longestStreak}</p>
-                  <p className="text-xs text-gray-600">Longest</p>
+                  <p className="text-lg font-bold text-white">{s.longestStreak}</p>
+                  <p className="text-xs text-muted">Longest</p>
                 </div>
               </div>
             ))}
