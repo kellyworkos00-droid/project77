@@ -26,13 +26,18 @@ body {
   letter-spacing: 0.01em;
 }
 
-.glass-panel {
+.crystal-panel {
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
   border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: var(--card-radius);
   box-shadow: 0 20px 70px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+/* Legacy alias */
+.glass-panel {
+  @apply crystal-panel;
 }
 
 .elevated-border {
@@ -54,8 +59,8 @@ body {
   box-shadow: 0 18px 45px rgba(124, 58, 237, 0.45);
 }
 
-.pill-button {
-  @apply inline-flex items-center justify-center gap-2 font-semibold transition-colors;
+.action-button {
+  @apply inline-flex items-center justify-center gap-2 font-semibold transition-all duration-200;
   padding: 0.65rem 1rem;
   border-radius: 9999px;
   color: #e8ecf5;
@@ -63,9 +68,15 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.pill-button:hover {
+.action-button:hover {
   background: rgba(255, 255, 255, 0.12);
   color: white;
+  transform: translateY(-1px);
+}
+
+/* Legacy alias */
+.pill-button {
+  @apply action-button;
 }
 
 .card-grid {

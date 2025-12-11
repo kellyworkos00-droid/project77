@@ -2,6 +2,8 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { THEMES, Theme } from '@/lib/themes'
+import { useTheme } from './ThemeProvider'
 
 interface SettingsFormProps {
   user: {
@@ -10,15 +12,18 @@ interface SettingsFormProps {
     bio: string | null
     image: string | null
     email: string | null
+    theme: string
   }
 }
 
 export function SettingsForm({ user }: SettingsFormProps) {
   const router = useRouter()
+  const { setTheme: setContextTheme } = useTheme()
   const [name, setName] = useState(user.name || '')
   const [username, setUsername] = useState(user.username || '')
   const [bio, setBio] = useState(user.bio || '')
   const [image, setImage] = useState(user.image || '')
+  const [theme, setTheme] = useState<Theme>((user.theme as Theme) || 'midnight')
   const [status, setStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle')
   const [error, setError] = useState('')
 
@@ -36,6 +41,7 @@ export function SettingsForm({ user }: SettingsFormProps) {
           username: username.trim(),
           bio: bio.trim(),
           image: image.trim(),
+          theme,
         }),
       })
 
@@ -44,6 +50,7 @@ export function SettingsForm({ user }: SettingsFormProps) {
         throw new Error(data.error || 'Failed to save settings')
       }
 
+      setContextTheme(theme)
       setStatus('saved')
       router.refresh()
     } catch (err: any) {
@@ -100,6 +107,27 @@ export function SettingsForm({ user }: SettingsFormProps) {
           placeholder="https://..."
         />
         <p className="text-xs text-muted">Paste an image link. If empty, we'll show your initial.</p>
+      </div>
+
+      <div className="space-y-2">
+        <label className="text-sm font-semibold text-white block">Theme</label>
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+          {(Object.entries(THEMES) as [Theme, any][]).map(([themeKey, themeData]) => (
+            <button
+              key={themeKey}
+              type="button"
+              onClick={() => setTheme(themeKey)}
+              className={`p-3 rounded-xl border-2 transition text-left text-sm font-medium ${
+                theme === themeKey
+                  ? 'border-sky-400 bg-white/10'
+                  : 'border-white/10 bg-white/5 hover:border-white/20'
+              }`}
+            >
+              <div className="font-semibold text-white">{themeData.name}</div>
+              <div className="text-xs text-muted mt-0.5">{themeData.description}</div>
+            </button>
+          ))}
+        </div>
       </div>
 
       {error && <p className="text-sm text-rose-300">{error}</p>}

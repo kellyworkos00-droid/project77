@@ -14,6 +14,7 @@ export async function PATCH(req: Request) {
   const usernameRaw = (body.username as string | undefined)?.trim() || null
   const bio = (body.bio as string | undefined)?.trim() || null
   const image = (body.image as string | undefined)?.trim() || null
+  const theme = (body.theme as string | undefined) || 'midnight'
 
   if (usernameRaw && !/^[A-Za-z0-9_]{3,20}$/.test(usernameRaw)) {
     return NextResponse.json({ error: 'Username must be 3-20 characters, letters/numbers/underscores only.' }, { status: 400 })
@@ -27,8 +28,9 @@ export async function PATCH(req: Request) {
         username: usernameRaw || undefined,
         bio: bio || undefined,
         image: image || undefined,
+        theme,
       },
-      select: { id: true, name: true, username: true, bio: true, image: true }
+      select: { id: true, name: true, username: true, bio: true, image: true, theme: true }
     })
 
     return NextResponse.json({ user })

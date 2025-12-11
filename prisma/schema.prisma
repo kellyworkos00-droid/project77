@@ -17,6 +17,7 @@ model User {
   image         String?
   username      String?   @unique
   bio           String?
+  theme         String    @default("midnight") // midnight, ocean, forest, sunset, nord, highcontrast
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
   
@@ -35,6 +36,8 @@ model User {
   shares        Share[]
   liveStreams   LiveStream[]
   memories      Memory[]
+  notifications Notification[] @relation("UserNotifications")
+  sentNotifications Notification[] @relation("NotificationSender")
   
   @@map("users")
 }
@@ -244,4 +247,22 @@ model Memory {
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   
   @@map("memories")
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  type      String   // "board_created", "new_follower", "post_like", "comment", etc.
+  message   String
+  userId    String   // recipient
+  senderId  String?  // who triggered the notification
+  boardId   String?  // if related to a board
+  postId    String?  // if related to a post
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+  
+  user      User     @relation("UserNotifications", fields: [userId], references: [id], onDelete: Cascade)
+  sender    User?    @relation("NotificationSender", fields: [senderId], references: [id], onDelete: Cascade)
+  
+  @@map("notifications")
+  @@index([userId, read])
 }
