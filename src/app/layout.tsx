@@ -20,6 +20,13 @@ export const metadata: Metadata = {
   formatDetection: {
     telephone: false,
   },
+  metadataBase: new URL('https://project77-ten.vercel.app'),
+  other: {
+    'theme-color': '#7c3aed',
+    'mobile-web-app-capable': 'yes',
+    'apple-mobile-web-app-capable': 'yes',
+    'apple-mobile-web-app-status-bar-style': 'black-translucent',
+  },
 }
 
 export const viewport = {
@@ -36,19 +43,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <head>
-        <meta name="theme-color" content="#7c3aed" />
-        <meta name="mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-        <script src="/register-sw.js" async />
-      </head>
       <body>
         <AuthProvider>
           <ThemeProvider>
             {children}
           </ThemeProvider>
         </AuthProvider>
+        <script src="/register-sw.js" async />
       </body>
     </html>
   )
