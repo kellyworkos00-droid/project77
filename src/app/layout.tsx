@@ -9,6 +9,16 @@ export const metadata: Metadata = {
   keywords: 'social media, bulletin board, community, connections, messaging, streaks',
   icons: {
     icon: '/logo.png',
+    apple: '/logo.png',
+  },
+  manifest: '/manifest.json',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'black-translucent',
+    title: 'PinBoard',
+  },
+  formatDetection: {
+    telephone: false,
   },
 }
 
@@ -26,6 +36,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head>
+        <meta name="theme-color" content="#7c3aed" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <script src="/register-sw.js" async />
+      </head>
       <body>
         <AuthProvider>
           <ThemeProvider>
